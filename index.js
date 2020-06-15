@@ -82,6 +82,10 @@ app.post('/api/users', userValidatorMiddleware,
 });
 
 app.put('/api/users/:id', userValidatorMiddleware, (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });}
+
   const formData = req.body;
   const idUser = req.params.id;
   connection.query('UPDATE user SET ? WHERE id = ?', [formData, idUser], err => {
